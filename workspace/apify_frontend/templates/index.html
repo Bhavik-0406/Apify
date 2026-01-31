@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Leads Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/styles.css" rel="stylesheet">
+  </head>
+  <body class="light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" id="mainNavbar">
+      <div class="container-fluid justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <img src="/static/images/Logo.png" alt="Company Logo" style="height:40px; width:auto; object-fit:contain; border-radius: 4px;">
+        </div>
+
+        <a class="navbar-brand mx-auto" href="#" style="font-weight: bold; font-size: 1.8rem;">Leads Generator</a>
+        <div class="d-flex align-items-center gap-2">
+          <label class="mb-0" style="font-size:0.9rem">Theme:</label>
+          <div class="form-check form-switch mb-0">
+            <input class="form-check-input" id="themeToggle" type="checkbox" style="cursor:pointer">
+            <label class="form-check-label" for="themeToggle" id="themeLabel" style="font-size:0.85rem; margin-left:5px; cursor:pointer">Light</label>
+          </div>
+      </div>
+    </nav>
+    <main class="container my-4">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="mb-3">
+            <label class="form-label">Apify API Key</label>
+            <input id="apiKey" class="form-control mb-3" placeholder="sk_...">
+            <button id="btnListActors" class="btn btn-outline-primary mb-3 w-100">List Actors</button>
+            <label class="form-label">Choose Actor</label>
+            <select id="actorSelect" class="form-select mb-3"></select>
+          </div>
+          <div id="statusBox" class="mt-3"></div>
+          <div id="progressBox" class="mt-2 text-muted small"></div>
+          <button id="btnRun" class="btn btn-success w-100 mt-4" style="padding: 12px; font-weight: bold; font-size: 1.1rem;">Run & Download Excel ✅</button>
+        </div>
+        <div class="col-md-8">
+          <h5>Filters</h5>
+          <form id="filterForm">
+          <div class="card p-3 mb-3">
+            <!-- Job Title Include/Exclude Section -->
+            <div class="mb-3">
+              <label class="form-label">Include these job titles</label>
+              <div class="input-group mb-2">
+                <input id="jobTitleIncludeInput" class="form-control" placeholder="Search or type job title and press Enter">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownJobTitleInclude" data-bs-toggle="dropdown" aria-expanded="false">Titles</button>
+                <ul class="dropdown-menu" id="jobTitleIncludeDropdownMenu" aria-labelledby="dropdownJobTitleInclude" style="max-height:220px; overflow:auto;">
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Software Developer">Software Developer</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Software Engineer">Software Engineer</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Data Scientist">Data Scientist</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Product Manager">Product Manager</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Project Manager">Project Manager</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Business Analyst">Business Analyst</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Marketing Manager">Marketing Manager</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Sales Representative">Sales Representative</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Account Manager">Account Manager</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="HR Manager">HR Manager</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Financial Analyst">Financial Analyst</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Accountant">Accountant</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Teacher">Teacher</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Nurse">Nurse</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Doctor">Doctor</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Realtor">Realtor</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Real Estate Agent">Real Estate Agent</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Graphic Designer">Graphic Designer</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="UX Designer">UX Designer</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Content Writer">Content Writer</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Customer Support">Customer Support</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Operations Manager">Operations Manager</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Consultant">Consultant</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Attorney">Attorney</a></li>
+                  <li><a class="dropdown-item job-include-dropdown-item" href="#" data-value="Engineer">Engineer</a></li>
+                </ul>
+              </div>
+              <div id="jobTitleIncludeTags" class="d-flex flex-wrap gap-2 mb-2"></div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Exclude these job titles</label>
+              <div class="input-group mb-2">
+                <input id="jobTitleExcludeInput" class="form-control" placeholder="Search or type job title and press Enter">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownJobTitleExclude" data-bs-toggle="dropdown" aria-expanded="false">Titles</button>
+                <ul class="dropdown-menu" id="jobTitleExcludeDropdownMenu" aria-labelledby="dropdownJobTitleExclude" style="max-height:220px; overflow:auto;">
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Software Developer">Software Developer</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Software Engineer">Software Engineer</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Data Scientist">Data Scientist</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Product Manager">Product Manager</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Project Manager">Project Manager</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Business Analyst">Business Analyst</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Marketing Manager">Marketing Manager</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Sales Representative">Sales Representative</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Account Manager">Account Manager</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="HR Manager">HR Manager</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Financial Analyst">Financial Analyst</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Accountant">Accountant</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Teacher">Teacher</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Nurse">Nurse</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Doctor">Doctor</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Realtor">Realtor</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Real Estate Agent">Real Estate Agent</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Graphic Designer">Graphic Designer</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="UX Designer">UX Designer</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Content Writer">Content Writer</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Customer Support">Customer Support</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Operations Manager">Operations Manager</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Consultant">Consultant</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Attorney">Attorney</a></li>
+                  <li><a class="dropdown-item job-exclude-dropdown-item" href="#" data-value="Engineer">Engineer</a></li>
+                </ul>
+              </div>
+              <div id="jobTitleExcludeTags" class="d-flex flex-wrap gap-2"></div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Seniority Level</label>
+              <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" id="dropdownSeniority" data-bs-toggle="dropdown" aria-expanded="false">Select Seniority Levels</button>
+                <div class="dropdown-menu p-3" aria-labelledby="dropdownSeniority" id="seniorityMenu">
+                  <div class="form-check"><input class="form-check-input seniority-checkbox" type="checkbox" value="Executive (C-Suite)" id="sen_1"><label class="form-check-label" for="sen_1">Executive (C-Suite)</label></div>
+                  <div class="form-check"><input class="form-check-input seniority-checkbox" type="checkbox" value="Director" id="sen_2"><label class="form-check-label" for="sen_2">Director</label></div>
+                  <div class="form-check"><input class="form-check-input seniority-checkbox" type="checkbox" value="Partner" id="sen_3"><label class="form-check-label" for="sen_3">Partner</label></div>
+                  <div class="form-check"><input class="form-check-input seniority-checkbox" type="checkbox" value="Head" id="sen_4"><label class="form-check-label" for="sen_4">Head</label></div>
+                  <div class="form-check"><input class="form-check-input seniority-checkbox" type="checkbox" value="Manager" id="sen_5"><label class="form-check-label" for="sen_5">Manager</label></div>
+                  <div class="form-check"><input class="form-check-input seniority-checkbox" type="checkbox" value="Senior" id="sen_6"><label class="form-check-label" for="sen_6">Senior</label></div>
+                  <div class="form-check"><input class="form-check-input seniority-checkbox" type="checkbox" value="Owner" id="sen_7"><label class="form-check-label" for="sen_7">Owner</label></div>
+                  <div class="form-check"><input class="form-check-input seniority-checkbox" type="checkbox" value="Trainee" id="sen_8"><label class="form-check-label" for="sen_8">Trainee</label></div>
+                  <div class="form-check"><input class="form-check-input seniority-checkbox" type="checkbox" value="Vice President" id="sen_9"><label class="form-check-label" for="sen_9">Vice President</label></div>
+                  <div class="form-check"><input class="form-check-input seniority-checkbox" type="checkbox" value="Founder" id="sen_10"><label class="form-check-label" for="sen_10">Founder</label></div>
+                  <div class="form-check"><input class="form-check-input seniority-checkbox" type="checkbox" value="Entry Level" id="sen_11"><label class="form-check-label" for="sen_11">Entry Level</label></div>
+                </div>
+              </div>
+              <div id="seniorityTags" class="d-flex flex-wrap gap-2 mt-2"></div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Functional Level</label>
+              <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" id="dropdownFunctional" data-bs-toggle="dropdown" aria-expanded="false">Select Functional Areas</button>
+                <div class="dropdown-menu p-3" aria-labelledby="dropdownFunctional" id="functionalMenu">
+                  <div class="form-check"><input class="form-check-input functional-checkbox" type="checkbox" value="C-Suite" id="func_1"><label class="form-check-label" for="func_1">C-Suite</label></div>
+                  <div class="form-check"><input class="form-check-input functional-checkbox" type="checkbox" value="Product Management" id="func_2"><label class="form-check-label" for="func_2">Product Management</label></div>
+                  <div class="form-check"><input class="form-check-input functional-checkbox" type="checkbox" value="Finance" id="func_3"><label class="form-check-label" for="func_3">Finance</label></div>
+                  <div class="form-check"><input class="form-check-input functional-checkbox" type="checkbox" value="Design" id="func_4"><label class="form-check-label" for="func_4">Design</label></div>
+                  <div class="form-check"><input class="form-check-input functional-checkbox" type="checkbox" value="Education" id="func_5"><label class="form-check-label" for="func_5">Education</label></div>
+                  <div class="form-check"><input class="form-check-input functional-checkbox" type="checkbox" value="Human Resources" id="func_6"><label class="form-check-label" for="func_6">Human Resources</label></div>
+                  <div class="form-check"><input class="form-check-input functional-checkbox" type="checkbox" value="Information Technology" id="func_7"><label class="form-check-label" for="func_7">Information Technology</label></div>
+                  <div class="form-check"><input class="form-check-input functional-checkbox" type="checkbox" value="Legal" id="func_8"><label class="form-check-label" for="func_8">Legal</label></div>
+                  <div class="form-check"><input class="form-check-input functional-checkbox" type="checkbox" value="Marketing" id="func_9"><label class="form-check-label" for="func_9">Marketing</label></div>
+                  <div class="form-check"><input class="form-check-input functional-checkbox" type="checkbox" value="Operations" id="func_10"><label class="form-check-label" for="func_10">Operations</label></div>
+                  <div class="form-check"><input class="form-check-input functional-checkbox" type="checkbox" value="Sales" id="func_11"><label class="form-check-label" for="func_11">Sales</label></div>
+                  <div class="form-check"><input class="form-check-input functional-checkbox" type="checkbox" value="Support" id="func_12"><label class="form-check-label" for="func_12">Support</label></div>
+                  <div class="form-check"><input class="form-check-input functional-checkbox" type="checkbox" value="Engineering" id="func_13"><label class="form-check-label" for="func_13">Engineering</label></div>
+                </div>
+              </div>
+              <div id="functionalTags" class="d-flex flex-wrap gap-2 mt-2"></div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Location Include / Exclude (choose multiple from dropdown)</label>
+              <div class="d-flex gap-2 align-items-start">
+                <div style="flex:1">
+                  <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" id="dropdownIncludeStates" data-bs-toggle="dropdown" aria-expanded="false">
+                      Include States
+                    </button>
+                    <div class="dropdown-menu p-3" aria-labelledby="dropdownIncludeStates" id="includeStatesMenu">
+                      <!-- full state list with checkboxes -->
+                      <div style="max-height:220px; overflow:auto">
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Alabama" id="s_AL"><label class="form-check-label" for="s_AL">Alabama</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Alaska" id="s_AK"><label class="form-check-label" for="s_AK">Alaska</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Arizona" id="s_AZ"><label class="form-check-label" for="s_AZ">Arizona</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Arkansas" id="s_AR"><label class="form-check-label" for="s_AR">Arkansas</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="California" id="s_CA"><label class="form-check-label" for="s_CA">California</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Colorado" id="s_CO"><label class="form-check-label" for="s_CO">Colorado</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Connecticut" id="s_CT"><label class="form-check-label" for="s_CT">Connecticut</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Delaware" id="s_DE"><label class="form-check-label" for="s_DE">Delaware</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="District of Columbia" id="s_DC"><label class="form-check-label" for="s_DC">District of Columbia</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Florida" id="s_FL"><label class="form-check-label" for="s_FL">Florida</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Georgia" id="s_GA"><label class="form-check-label" for="s_GA">Georgia</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Hawaii" id="s_HI"><label class="form-check-label" for="s_HI">Hawaii</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Idaho" id="s_ID"><label class="form-check-label" for="s_ID">Idaho</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Illinois" id="s_IL"><label class="form-check-label" for="s_IL">Illinois</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Indiana" id="s_IN"><label class="form-check-label" for="s_IN">Indiana</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Iowa" id="s_IA"><label class="form-check-label" for="s_IA">Iowa</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Kansas" id="s_KS"><label class="form-check-label" for="s_KS">Kansas</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Kentucky" id="s_KY"><label class="form-check-label" for="s_KY">Kentucky</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Louisiana" id="s_LA"><label class="form-check-label" for="s_LA">Louisiana</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Maine" id="s_ME"><label class="form-check-label" for="s_ME">Maine</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Maryland" id="s_MD"><label class="form-check-label" for="s_MD">Maryland</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Massachusetts" id="s_MA"><label class="form-check-label" for="s_MA">Massachusetts</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Michigan" id="s_MI"><label class="form-check-label" for="s_MI">Michigan</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Minnesota" id="s_MN"><label class="form-check-label" for="s_MN">Minnesota</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Mississippi" id="s_MS"><label class="form-check-label" for="s_MS">Mississippi</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Missouri" id="s_MO"><label class="form-check-label" for="s_MO">Missouri</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Montana" id="s_MT"><label class="form-check-label" for="s_MT">Montana</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Nebraska" id="s_NE"><label class="form-check-label" for="s_NE">Nebraska</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Nevada" id="s_NV"><label class="form-check-label" for="s_NV">Nevada</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="New Hampshire" id="s_NH"><label class="form-check-label" for="s_NH">New Hampshire</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="New Jersey" id="s_NJ"><label class="form-check-label" for="s_NJ">New Jersey</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="New Mexico" id="s_NM"><label class="form-check-label" for="s_NM">New Mexico</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="New York" id="s_NY"><label class="form-check-label" for="s_NY">New York</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="North Carolina" id="s_NC"><label class="form-check-label" for="s_NC">North Carolina</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="North Dakota" id="s_ND"><label class="form-check-label" for="s_ND">North Dakota</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Ohio" id="s_OH"><label class="form-check-label" for="s_OH">Ohio</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Oklahoma" id="s_OK"><label class="form-check-label" for="s_OK">Oklahoma</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Oregon" id="s_OR"><label class="form-check-label" for="s_OR">Oregon</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Pennsylvania" id="s_PA"><label class="form-check-label" for="s_PA">Pennsylvania</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Puerto Rico" id="s_PR"><label class="form-check-label" for="s_PR">Puerto Rico</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Rhode Island" id="s_RI"><label class="form-check-label" for="s_RI">Rhode Island</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="South Carolina" id="s_SC"><label class="form-check-label" for="s_SC">South Carolina</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="South Dakota" id="s_SD"><label class="form-check-label" for="s_SD">South Dakota</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Tennessee" id="s_TN"><label class="form-check-label" for="s_TN">Tennessee</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Texas" id="s_TX"><label class="form-check-label" for="s_TX">Texas</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Utah" id="s_UT"><label class="form-check-label" for="s_UT">Utah</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Vermont" id="s_VT"><label class="form-check-label" for="s_VT">Vermont</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Virginia" id="s_VA"><label class="form-check-label" for="s_VA">Virginia</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Washington" id="s_WA"><label class="form-check-label" for="s_WA">Washington</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="West Virginia" id="s_WV"><label class="form-check-label" for="s_WV">West Virginia</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Wisconsin" id="s_WI"><label class="form-check-label" for="s_WI">Wisconsin</label></div>
+                        <div class="form-check"><input class="form-check-input state-include-checkbox" type="checkbox" value="Wyoming" id="s_WY"><label class="form-check-label" for="s_WY">Wyoming</label></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="locationIncludeTags" class="d-flex flex-wrap gap-2 mt-2"></div>
+                </div>
+                <div style="flex:1">
+                  <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" id="dropdownExcludeStates" data-bs-toggle="dropdown" aria-expanded="false">
+                      Exclude States
+                    </button>
+                    <div class="dropdown-menu p-3" aria-labelledby="dropdownExcludeStates" id="excludeStatesMenu">
+                      <div style="max-height:220px; overflow:auto">
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Alaska" id="se_AK"><label class="form-check-label" for="se_AK">Alaska</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Arizona" id="se_AZ"><label class="form-check-label" for="se_AZ">Arizona</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Arkansas" id="se_AR"><label class="form-check-label" for="se_AR">Arkansas</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="California" id="se_CA"><label class="form-check-label" for="se_CA">California</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Colorado" id="se_CO"><label class="form-check-label" for="se_CO">Colorado</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Connecticut" id="se_CT"><label class="form-check-label" for="se_CT">Connecticut</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Delaware" id="se_DE"><label class="form-check-label" for="se_DE">Delaware</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="District of Columbia" id="se_DC"><label class="form-check-label" for="se_DC">District of Columbia</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Florida" id="se_FL"><label class="form-check-label" for="se_FL">Florida</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Georgia" id="se_GA"><label class="form-check-label" for="se_GA">Georgia</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Hawaii" id="se_HI"><label class="form-check-label" for="se_HI">Hawaii</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Idaho" id="se_ID"><label class="form-check-label" for="se_ID">Idaho</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Illinois" id="se_IL"><label class="form-check-label" for="se_IL">Illinois</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Indiana" id="se_IN"><label class="form-check-label" for="se_IN">Indiana</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Iowa" id="se_IA"><label class="form-check-label" for="se_IA">Iowa</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Kansas" id="se_KS"><label class="form-check-label" for="se_KS">Kansas</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Kentucky" id="se_KY"><label class="form-check-label" for="se_KY">Kentucky</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Louisiana" id="se_LA"><label class="form-check-label" for="se_LA">Louisiana</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Maine" id="se_ME"><label class="form-check-label" for="se_ME">Maine</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Maryland" id="se_MD"><label class="form-check-label" for="se_MD">Maryland</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Massachusetts" id="se_MA"><label class="form-check-label" for="se_MA">Massachusetts</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Michigan" id="se_MI"><label class="form-check-label" for="se_MI">Michigan</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Minnesota" id="se_MN"><label class="form-check-label" for="se_MN">Minnesota</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Mississippi" id="se_MS"><label class="form-check-label" for="se_MS">Mississippi</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Missouri" id="se_MO"><label class="form-check-label" for="se_MO">Missouri</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Montana" id="se_MT"><label class="form-check-label" for="se_MT">Montana</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Nebraska" id="se_NE"><label class="form-check-label" for="se_NE">Nebraska</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Nevada" id="se_NV"><label class="form-check-label" for="se_NV">Nevada</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="New Hampshire" id="se_NH"><label class="form-check-label" for="se_NH">New Hampshire</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="New Jersey" id="se_NJ"><label class="form-check-label" for="se_NJ">New Jersey</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="New Mexico" id="se_NM"><label class="form-check-label" for="se_NM">New Mexico</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="New York" id="se_NY"><label class="form-check-label" for="se_NY">New York</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="North Carolina" id="se_NC"><label class="form-check-label" for="se_NC">North Carolina</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="North Dakota" id="se_ND"><label class="form-check-label" for="se_ND">North Dakota</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Ohio" id="se_OH"><label class="form-check-label" for="se_OH">Ohio</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Oklahoma" id="se_OK"><label class="form-check-label" for="se_OK">Oklahoma</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Oregon" id="se_OR"><label class="form-check-label" for="se_OR">Oregon</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Pennsylvania" id="se_PA"><label class="form-check-label" for="se_PA">Pennsylvania</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Puerto Rico" id="se_PR"><label class="form-check-label" for="se_PR">Puerto Rico</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Rhode Island" id="se_RI"><label class="form-check-label" for="se_RI">Rhode Island</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="South Carolina" id="se_SC"><label class="form-check-label" for="se_SC">South Carolina</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="South Dakota" id="se_SD"><label class="form-check-label" for="se_SD">South Dakota</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Tennessee" id="se_TN"><label class="form-check-label" for="se_TN">Tennessee</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Texas" id="se_TX"><label class="form-check-label" for="se_TX">Texas</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Utah" id="se_UT"><label class="form-check-label" for="se_UT">Utah</label></div>
+                        <div class="form-check"><input class="form-check-input state-exclude-checkbox" type="checkbox" value="Vermont" id="se_VT"><label class="form-check-label" for="se_VT">Vermont</label></div>
+                       /div>
+
+                    </div>
+                  </div>
+                  <div id="locationExcludeTags" class="d-flex flex-wrap gap-2 mt-2"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email Status</label>
+              <select id="emailStatus" class="form-select">
+                <option value="">--select--</option>
+                <option>Verified</option>
+                <option>Unverified</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Size (No. of employees)</label>
+              <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" id="dropdownSize" data-bs-toggle="dropdown" aria-expanded="false">Select Sizes</button>
+                <div class="dropdown-menu p-3" aria-labelledby="dropdownSize" id="sizeMenu">
+                  <div class="form-check"><input class="form-check-input size-checkbox" type="checkbox" value="1-10" id="sz_1"><label class="form-check-label" for="sz_1">1-10</label></div>
+                  <div class="form-check"><input class="form-check-input size-checkbox" type="checkbox" value="11-50" id="sz_2"><label class="form-check-label" for="sz_2">11-50</label></div>
+                  <div class="form-check"><input class="form-check-input size-checkbox" type="checkbox" value="51-200" id="sz_3"><label class="form-check-label" for="sz_3">51-200</label></div>
+                  <div class="form-check"><input class="form-check-input size-checkbox" type="checkbox" value="201-500" id="sz_4"><label class="form-check-label" for="sz_4">201-500</label></div>
+                  <div class="form-check"><input class="form-check-input size-checkbox" type="checkbox" value="501-1000" id="sz_5"><label class="form-check-label" for="sz_5">501-1000</label></div>
+                  <div class="form-check"><input class="form-check-input size-checkbox" type="checkbox" value=">1000" id="sz_6"><label class="form-check-label" for="sz_6">&gt;1000</label></div>
+                </div>
+              </div>
+              <div id="sizeTags" class="d-flex flex-wrap gap-2 mt-2"></div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Industry</label>
+              <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" id="dropdownIndustry" data-bs-toggle="dropdown" aria-expanded="false">Select Industries</button>
+                <div class="dropdown-menu p-3" aria-labelledby="dropdownIndustry" id="industryMenu" style="max-height:300px; overflow:auto;">
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Information Technology & Services" id="ind_1"><label class="form-check-label" for="ind_1">Information Technology & Services</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Real Estate" id="ind_2"><label class="form-check-label" for="ind_2">Real Estate</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Health, Wellness & Fitness" id="ind_3"><label class="form-check-label" for="ind_3">Health, Wellness & Fitness</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Management Consulting" id="ind_4"><label class="form-check-label" for="ind_4">Management Consulting</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Computer Software" id="ind_5"><label class="form-check-label" for="ind_5">Computer Software</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Retail" id="ind_6"><label class="form-check-label" for="ind_6">Retail</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Financial Services" id="ind_7"><label class="form-check-label" for="ind_7">Financial Services</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Hospital & Health Care" id="ind_8"><label class="form-check-label" for="ind_8">Hospital & Health Care</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Education Management" id="ind_9"><label class="form-check-label" for="ind_9">Education Management</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Design" id="ind_10"><label class="form-check-label" for="ind_10">Design</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Accounting" id="ind_11"><label class="form-check-label" for="ind_11">Accounting</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Leisure, Travel & Tourism" id="ind_12"><label class="form-check-label" for="ind_12">Leisure, Travel & Tourism</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Professional Training & Coaching" id="ind_13"><label class="form-check-label" for="ind_13">Professional Training & Coaching</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Telecommunications" id="ind_14"><label class="form-check-label" for="ind_14">Telecommunications</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Insurance" id="ind_15"><label class="form-check-label" for="ind_15">Insurance</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Staffing & Recruiting" id="ind_16"><label class="form-check-label" for="ind_16">Staffing & Recruiting</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Pharmaceuticals" id="ind_17"><label class="form-check-label" for="ind_17">Pharmaceuticals</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="E-Learning" id="ind_18"><label class="form-check-label" for="ind_18">E-Learning</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Government Administration" id="ind_19"><label class="form-check-label" for="ind_19">Government Administration</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Banking" id="ind_20"><label class="form-check-label" for="ind_20">Banking</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Computer & Network Security" id="ind_21"><label class="form-check-label" for="ind_21">Computer & Network Security</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Legislative Office" id="ind_22"><label class="form-check-label" for="ind_22">Legislative Office</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Construction" id="ind_23"><label class="form-check-label" for="ind_23">Construction</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Marketing & Advertising" id="ind_24"><label class="form-check-label" for="ind_24">Marketing & Advertising</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Consumer Services" id="ind_25"><label class="form-check-label" for="ind_25">Consumer Services</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Automotive" id="ind_26"><label class="form-check-label" for="ind_26">Automotive</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Restaurants" id="ind_27"><label class="form-check-label" for="ind_27">Restaurants</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Food & Beverages" id="ind_28"><label class="form-check-label" for="ind_28">Food & Beverages</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Events Services" id="ind_29"><label class="form-check-label" for="ind_29">Events Services</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Nonprofit Organization Management" id="ind_30"><label class="form-check-label" for="ind_30">Nonprofit Organization Management</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Entertainment" id="ind_31"><label class="form-check-label" for="ind_31">Entertainment</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Electrical/Electronic Manufacturing" id="ind_32"><label class="form-check-label" for="ind_32">Electrical/Electronic Manufacturing</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Transportation/Trucking/Railroad" id="ind_33"><label class="form-check-label" for="ind_33">Transportation/Trucking/Railroad</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Law Practice" id="ind_34"><label class="form-check-label" for="ind_34">Law Practice</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Higher Education" id="ind_35"><label class="form-check-label" for="ind_35">Higher Education</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Architecture & Planning" id="ind_36"><label class="form-check-label" for="ind_36">Architecture & Planning</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Mechanical or Industrial Engineering" id="ind_37"><label class="form-check-label" for="ind_37">Mechanical or Industrial Engineering</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Human Resources" id="ind_38"><label class="form-check-label" for="ind_38">Human Resources</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Sports" id="ind_39"><label class="form-check-label" for="ind_39">Sports</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Legal Services" id="ind_40"><label class="form-check-label" for="ind_40">Legal Services</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Oil & Energy" id="ind_41"><label class="form-check-label" for="ind_41">Oil & Energy</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Machinery" id="ind_42"><label class="form-check-label" for="ind_42">Machinery</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Wholesale" id="ind_43"><label class="form-check-label" for="ind_43">Wholesale</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Music" id="ind_44"><label class="form-check-label" for="ind_44">Music</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Consumer Goods" id="ind_45"><label class="form-check-label" for="ind_45">Consumer Goods</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Photography" id="ind_46"><label class="form-check-label" for="ind_46">Photography</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Medical Practice" id="ind_47"><label class="form-check-label" for="ind_47">Medical Practice</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Cosmetics" id="ind_48"><label class="form-check-label" for="ind_48">Cosmetics</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Environmental Services" id="ind_49"><label class="form-check-label" for="ind_49">Environmental Services</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Media Production" id="ind_50"><label class="form-check-label" for="ind_50">Media Production</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Graphic Design" id="ind_51"><label class="form-check-label" for="ind_51">Graphic Design</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Business Supplies & Equipment" id="ind_52"><label class="form-check-label" for="ind_52">Business Supplies & Equipment</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Renewable Energy & Environment" id="ind_53"><label class="form-check-label" for="ind_53">Renewable Energy & Environment</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Publishing" id="ind_54"><label class="form-check-label" for="ind_54">Publishing</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Shipbuilding" id="ind_55"><label class="form-check-label" for="ind_55">Shipbuilding</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Tobacco" id="ind_56"><label class="form-check-label" for="ind_56">Tobacco</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Supermarkets" id="ind_57"><label class="form-check-label" for="ind_57">Supermarkets</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Military" id="ind_58"><label class="form-check-label" for="ind_58">Military</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Ranching" id="ind_59"><label class="form-check-label" for="ind_59">Ranching</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Railroad Manufacture" id="ind_60"><label class="form-check-label" for="ind_60">Railroad Manufacture</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Gambling & Casinos" id="ind_61"><label class="form-check-label" for="ind_61">Gambling & Casinos</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Libraries" id="ind_62"><label class="form-check-label" for="ind_62">Libraries</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="International Affairs" id="ind_63"><label class="form-check-label" for="ind_63">International Affairs</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Wireless" id="ind_64"><label class="form-check-label" for="ind_64">Wireless</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Package/Freight Delivery" id="ind_65"><label class="form-check-label" for="ind_65">Package/Freight Delivery</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Political Organization" id="ind_66"><label class="form-check-label" for="ind_66">Political Organization</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Biotechnology" id="ind_67"><label class="form-check-label" for="ind_67">Biotechnology</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Semiconductors" id="ind_68"><label class="form-check-label" for="ind_68">Semiconductors</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Glass, Ceramics & Concrete" id="ind_69"><label class="form-check-label" for="ind_69">Glass, Ceramics & Concrete</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Think Tanks" id="ind_70"><label class="form-check-label" for="ind_70">Think Tanks</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Fund-Raising" id="ind_71"><label class="form-check-label" for="ind_71">Fund-Raising</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Investment Banking" id="ind_72"><label class="form-check-label" for="ind_72">Investment Banking</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Law Enforcement" id="ind_73"><label class="form-check-label" for="ind_73">Law Enforcement</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Paper & Forest Products" id="ind_74"><label class="form-check-label" for="ind_74">Paper & Forest Products</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Newspapers" id="ind_75"><label class="form-check-label" for="ind_75">Newspapers</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Agriculture" id="ind_76"><label class="form-check-label" for="ind_76">Agriculture</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Nanotechnology" id="ind_77"><label class="form-check-label" for="ind_77">Nanotechnology</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Alternative Dispute Resolution" id="ind_78"><label class="form-check-label" for="ind_78">Alternative Dispute Resolution</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Judiciary" id="ind_79"><label class="form-check-label" for="ind_79">Judiciary</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Fishery" id="ind_80"><label class="form-check-label" for="ind_80">Fishery</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Government Relations" id="ind_81"><label class="form-check-label" for="ind_81">Government Relations</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Defense & Space" id="ind_82"><label class="form-check-label" for="ind_82">Defense & Space</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Warehousing" id="ind_83"><label class="form-check-label" for="ind_83">Warehousing</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Insurance Carriers" id="ind_84"><label class="form-check-label" for="ind_84">Insurance Carriers</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Public Policy" id="ind_85"><label class="form-check-label" for="ind_85">Public Policy</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Alternative Medicine" id="ind_86"><label class="form-check-label" for="ind_86">Alternative Medicine</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Public Safety" id="ind_87"><label class="form-check-label" for="ind_87">Public Safety</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Philanthropy" id="ind_88"><label class="form-check-label" for="ind_88">Philanthropy</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Program Development" id="ind_89"><label class="form-check-label" for="ind_89">Program Development</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Outsourcing/Offshoring" id="ind_90"><label class="form-check-label" for="ind_90">Outsourcing/Offshoring</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Market Research" id="ind_91"><label class="form-check-label" for="ind_91">Market Research</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Computer Networking" id="ind_92"><label class="form-check-label" for="ind_92">Computer Networking</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Translation & Localization" id="ind_93"><label class="form-check-label" for="ind_93">Translation & Localization</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Computer Hardware" id="ind_94"><label class="form-check-label" for="ind_94">Computer Hardware</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Executive Office" id="ind_95"><label class="form-check-label" for="ind_95">Executive Office</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Building & Construction" id="ind_96"><label class="form-check-label" for="ind_96">Building & Construction</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Commercial Real Estate" id="ind_97"><label class="form-check-label" for="ind_97">Commercial Real Estate</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Aviation & Aerospace" id="ind_98"><label class="form-check-label" for="ind_98">Aviation & Aerospace</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Plastics" id="ind_99"><label class="form-check-label" for="ind_99">Plastics</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Wine & Spirits" id="ind_100"><label class="form-check-label" for="ind_100">Wine & Spirits</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Veterinary" id="ind_101"><label class="form-check-label" for="ind_101">Veterinary</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Luxury Goods & Jewelry" id="ind_102"><label class="form-check-label" for="ind_102">Luxury Goods & Jewelry</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Maritime" id="ind_103"><label class="form-check-label" for="ind_103">Maritime</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Airlines/Aviation" id="ind_104"><label class="form-check-label" for="ind_104">Airlines/Aviation</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Fine Art" id="ind_105"><label class="form-check-label" for="ind_105">Fine Art</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Sporting Goods" id="ind_106"><label class="form-check-label" for="ind_106">Sporting Goods</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Utilities" id="ind_107"><label class="form-check-label" for="ind_107">Utilities</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Performing Arts" id="ind_108"><label class="form-check-label" for="ind_108">Performing Arts</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Recreational Facilities & Services" id="ind_109"><label class="form-check-label" for="ind_109">Recreational Facilities & Services</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Industrial Automation" id="ind_110"><label class="form-check-label" for="ind_110">Industrial Automation</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Consumer Electronics" id="ind_111"><label class="form-check-label" for="ind_111">Consumer Electronics</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Motion Pictures & Film" id="ind_112"><label class="form-check-label" for="ind_112">Motion Pictures & Film</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Broadcast Media" id="ind_113"><label class="form-check-label" for="ind_113">Broadcast Media</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Primary/Secondary Education" id="ind_114"><label class="form-check-label" for="ind_114">Primary/Secondary Education</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Mental Health Care" id="ind_115"><label class="form-check-label" for="ind_115">Mental Health Care</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Textiles" id="ind_116"><label class="form-check-label" for="ind_116">Textiles</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Writing & Editing" id="ind_117"><label class="form-check-label" for="ind_117">Writing & Editing</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Farming" id="ind_118"><label class="form-check-label" for="ind_118">Farming</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Online Media" id="ind_119"><label class="form-check-label" for="ind_119">Online Media</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Chemicals" id="ind_120"><label class="form-check-label" for="ind_120">Chemicals</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Security & Investigations" id="ind_121"><label class="form-check-label" for="ind_121">Security & Investigations</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Civic & Social Organization" id="ind_122"><label class="form-check-label" for="ind_122">Civic & Social Organization</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Medical Devices" id="ind_123"><label class="form-check-label" for="ind_123">Medical Devices</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Logistics & Supply Chain" id="ind_124"><label class="form-check-label" for="ind_124">Logistics & Supply Chain</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Training & Development" id="ind_125"><label class="form-check-label" for="ind_125">Training & Development</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Furniture" id="ind_126"><label class="form-check-label" for="ind_126">Furniture</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Printing" id="ind_127"><label class="form-check-label" for="ind_127">Printing</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Public Relations & Communications" id="ind_128"><label class="form-check-label" for="ind_128">Public Relations & Communications</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Religious Institutions" id="ind_129"><label class="form-check-label" for="ind_129">Religious Institutions</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Civil Engineering" id="ind_130"><label class="form-check-label" for="ind_130">Civil Engineering</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Arts & Crafts" id="ind_131"><label class="form-check-label" for="ind_131">Arts & Crafts</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Food Production" id="ind_132"><label class="form-check-label" for="ind_132">Food Production</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Facilities Services" id="ind_133"><label class="form-check-label" for="ind_133">Facilities Services</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Building Materials" id="ind_134"><label class="form-check-label" for="ind_134">Building Materials</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Individual & Family Services" id="ind_135"><label class="form-check-label" for="ind_135">Individual & Family Services</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Computer Games" id="ind_136"><label class="form-check-label" for="ind_136">Computer Games</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Information Services" id="ind_137"><label class="form-check-label" for="ind_137">Information Services</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Import & Export" id="ind_138"><label class="form-check-label" for="ind_138">Import & Export</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Venture Capital & Private Equity" id="ind_139"><label class="form-check-label" for="ind_139">Venture Capital & Private Equity</label></div>
+                  <div class="form-check"><input class="form-check-input industry-checkbox" type="checkbox" value="Investment Management" id="ind_140"><label class="form-check-label" for="ind_140">Investment Management</label></div>
+                </div>
+              </div>
+              <div id="industryTags" class="d-flex flex-wrap gap-2 mt-2"></div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Revenue (Minimum / Maximum)</label>
+              <div class="d-flex gap-2 align-items-start">
+                <div style="flex:1">
+                  <select id="minRevenue" class="form-select">
+                    <option value="">Select Minimum Revenue</option>
+                    <option value="100K">100K</option>
+                    <option value="500K">500K</option>
+                    <option value="1M">1M</option>
+                    <option value="5M">5M</option>
+                    <option value="10M">10M</option>
+                    <option value="25M">25M</option>
+                    <option value="50M">50M</option>
+                    <option value="100M">100M</option>
+                  </select>
+                  <div id="minRevenueTags" class="d-flex flex-wrap gap-2 mt-2"></div>
+                </div>
+                <div style="flex:1">
+                  <select id="maxRevenue" class="form-select">
+                    <option value="">Select Maximum Revenue</option>
+                    <option value="100K">100K</option>
+                    <option value="500K">500K</option>
+                    <option value="1M">1M</option>
+                    <option value="5M">5M</option>
+                    <option value="10M">10M</option>
+                    <option value="25M">25M</option>
+                    <option value="50M">50M</option>
+                    <option value="100M">100M</option>
+                  </select>
+                  <div id="maxRevenueTags" class="d-flex flex-wrap gap-2 mt-2"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Funding</label>
+              <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start" type="button" id="dropdownFunding" data-bs-toggle="dropdown" aria-expanded="false">Select Funding Stages</button>
+                <div class="dropdown-menu p-3" aria-labelledby="dropdownFunding" id="fundingMenu" style="max-height:300px; overflow:auto;">
+                  <div class="form-check"><input class="form-check-input funding-checkbox" type="checkbox" value="Angel Round" id="fund_1"><label class="form-check-label" for="fund_1">Angel Round</label></div>
+                  <div class="form-check"><input class="form-check-input funding-checkbox" type="checkbox" value="Seed Round" id="fund_2"><label class="form-check-label" for="fund_2">Seed Round</label></div>
+                  <div class="form-check"><input class="form-check-input funding-checkbox" type="checkbox" value="Series A" id="fund_3"><label class="form-check-label" for="fund_3">Series A</label></div>
+                  <div class="form-check"><input class="form-check-input funding-checkbox" type="checkbox" value="Series B" id="fund_4"><label class="form-check-label" for="fund_4">Series B</label></div>
+                  <div class="form-check"><input class="form-check-input funding-checkbox" type="checkbox" value="Series C" id="fund_5"><label class="form-check-label" for="fund_5">Series C</label></div>
+                  <div class="form-check"><input class="form-check-input funding-checkbox" type="checkbox" value="Series D" id="fund_6"><label class="form-check-label" for="fund_6">Series D</label></div>
+                  <div class="form-check"><input class="form-check-input funding-checkbox" type="checkbox" value="Series E" id="fund_7"><label class="form-check-label" for="fund_7">Series E</label></div>
+                  <div class="form-check"><input class="form-check-input funding-checkbox" type="checkbox" value="Series F" id="fund_8"><label class="form-check-label" for="fund_8">Series F</label></div>
+                  <div class="form-check"><input class="form-check-input funding-checkbox" type="checkbox" value="Venture Round" id="fund_9"><label class="form-check-label" for="fund_9">Venture Round</label></div>
+                  <div class="form-check"><input class="form-check-input funding-checkbox" type="checkbox" value="Debt Financing" id="fund_10"><label class="form-check-label" for="fund_10">Debt Financing</label></div>
+                  <div class="form-check"><input class="form-check-input funding-checkbox" type="checkbox" value="Convertible Note" id="fund_11"><label class="form-check-label" for="fund_11">Convertible Note</label></div>
+                  <div class="form-check"><input class="form-check-input funding-checkbox" type="checkbox" value="Private Equity Round" id="fund_12"><label class="form-check-label" for="fund_12">Private Equity Round</label></div>
+                  <div class="form-check"><input class="form-check-input funding-checkbox" type="checkbox" value="Other Round" id="fund_13"><label class="form-check-label" for="fund_13">Other Round</label></div>
+                </div>
+              </div>
+              <div id="fundingTags" class="d-flex flex-wrap gap-2 mt-2"></div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Company Website</label>
+              <div class="input-group">
+                <input id="companyWebsiteInput" class="form-control" placeholder="Enter company website">
+                <button type="button" id="btnAddCompanyWebsite" class="btn btn-outline-primary">Add</button>
+              </div>
+              <div id="companyWebsiteTags" class="d-flex flex-wrap gap-2 mt-2"></div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Keyword</label>
+              <div class="input-group">
+                <input id="keywordsInput" class="form-control" placeholder="Enter keyword">
+                <button type="button" id="btnAddKeyword" class="btn btn-outline-primary">Add</button>
+              </div>
+              <div id="keywordsTags" class="d-flex flex-wrap gap-2 mt-2"></div>
+            </div>
+
+            <div id="selectedFilters" class="mt-3"></div>
+          </form>
+        </div>
+    </main>
+    <!-- Toast container -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 2000">
+      <div id="filterToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">Added</div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Theme toggle script - inline for immediate execution -->
+    <script>
+      (function() {
+        function applyTheme(theme) {
+          document.body.className = theme;
+          const navbar = document.getElementById('mainNavbar');
+          const label = document.getElementById('themeLabel');
+          
+          if (theme === 'dark') {
+            if (navbar) {
+              navbar.classList.remove('navbar-light', 'bg-light');
+              navbar.classList.add('navbar-dark');
+            }
+            if (label) label.textContent = 'Dark';
+          } else {
+            if (navbar) {
+              navbar.classList.remove('navbar-dark');
+              navbar.classList.add('navbar-light', 'bg-light');
+            }
+            if (label) label.textContent = 'Light';
+          }
+          localStorage.setItem('theme', theme);
+        }
+        
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        const toggle = document.getElementById('themeToggle');
+        if (toggle) {
+          toggle.checked = (savedTheme === 'dark');
+          toggle.addEventListener('change', function() {
+            const newTheme = this.checked ? 'dark' : 'light';
+            applyTheme(newTheme);
+          });
+        }
+        applyTheme(savedTheme);
+      })();
+    </script>
+    <script src="/static/js/main.js"></script>
+  </body>
+</html>

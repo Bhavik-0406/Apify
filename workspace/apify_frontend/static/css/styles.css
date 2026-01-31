@@ -1,0 +1,62 @@
+body.light { background:#f8f9fa; color:#212529; }
+body.dark { background:#000000; color:#ffffff; }
+
+/* Tag/Badge styling for filters */
+.badge { font-size: .9rem; }
+.badge.bg-secondary { background-color: #6c757d !important; }
+body.dark .badge.bg-secondary { background-color: #7a8288 !important; }
+
+/* Filter input styling */
+.form-control, .form-select { border-radius: 4px; }
+
+/* Navbar logo preview */
+#navLogoPreview img { border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+.navbar .form-control-sm { width: 180px; }
+
+/* Typeahead suggestion list */
+#jobSuggestions { background: var(--bs-body-bg); }
+#jobSuggestions .list-group-item { cursor: pointer; }
+
+/* Dark mode text visibility */
+body.dark { --bs-body-color: #ffffff; }
+body.dark h1, body.dark h2, body.dark h3, body.dark h4, body.dark h5, body.dark h6 { color: #ffffff; }
+body.dark label { color: #ffffff; }
+body.dark .form-label { color: #ffffff; }
+body.dark .form-text { color: #d0d0d0; }
+body.dark small { color: #d0d0d0; }
+
+/* Dark navbar styles */
+body.dark .navbar { background-color: #1a1a1a !important; border-color: #333333 !important; }
+body.dark .navbar .navbar-brand { color: #ffffff !important; }
+body.dark .navbar .btn { color: #ffffff !important; border-color: #555555 !important; background-color: #2a2a2a !important; }
+body.dark .navbar .btn:hover { background-color: #3a3a3a !important; }
+body.dark .navbar label { color: #ffffff !important; }
+body.dark #jobSuggestions { background: #1a1a1a; color: #ffffff; }
+body.dark .dropdown-menu { background: #1a1a1a; color: #ffffff; border-color: #333333; }
+body.dark .dropdown-menu .form-check-label { color: #ffffff; }
+body.dark .dropdown-item { color: #ffffff !important; }
+body.dark .dropdown-item:hover { background-color: #333333 !important; }
+body.dark .dropdown-item:active { background-color: #444444 !important; }
+body.dark .form-check-input { filter: invert(1) hue-rotate(180deg); }
+body.dark .form-control { background: #1a1a1a; color: #ffffff; border-color: #555555; }
+body.dark .form-control::placeholder { color: #999999; }
+body.dark .form-select { background: #1a1a1a; color: #ffffff; border-color: #555555; }
+body.dark .form-select option { background: #1a1a1a; color: #ffffff; }
+body.dark .btn { border-color: #555555; background-color: #2a2a2a; color: #ffffff; }
+body.dark .btn:hover { background-color: #3a3a3a; }
+body.dark .badge { background-color: #4a5a6a !important; color: #ffffff !important; }
+body.dark .text-muted { color: #999999 !important; }
+body.dark .list-group-item { background-color: #1a1a1a; border-color: #333333; color: #ffffff; }
+body.dark .list-group-item:hover { background-color: #2a2a2a; }
+body.dark .spinner-border { border-color: currentColor; border-right-color: transparent; }
+body.dark .table { color: #ffffff; border-color: #333333; }
+body.dark .table th { background-color: #1a1a1a; color: #ffffff; }
+body.dark .table td { border-color: #333333; }
+
+/* Dark mode filter section */
+body.dark .card { background-color: #000000 !important; border-color: #333333 !important; }
+body.dark .card p { color: #ffffff; }
+body.dark .input-group { background-color: #000000; }
+
+
+
